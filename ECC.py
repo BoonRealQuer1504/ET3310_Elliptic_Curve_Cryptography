@@ -6,9 +6,6 @@
 # Created: Tue 16 Dec 2025 08:25:39 Hanoi, Vietnam
 
 def modinv(a, p):
-    """
-    Tính nghịch đảo modulo: a^-1 mod p
-    """
     if a == 0:
         raise ZeroDivisionError("Không có nghịch đảo modulo")
 
@@ -29,7 +26,6 @@ class EllipticCurve:
         self.b = b
         self.p = p
 
-        # Kiểm tra đường cong không suy biến
         if (4 * a**3 + 27 * b**2) % p == 0:
             raise ValueError("Đường cong suy biến")
 
@@ -97,17 +93,16 @@ def generate_keypair(curve, G, n):
     public_key = scalar_mult(private_key, G)
     return private_key, public_key
 
-def encrypt(curve, G, public_key, message_point, n):
-    k = random.randint(1, n - 1)
-    C1 = scalar_mult(k, G)
-    C2 = point_add(message_point, scalar_mult(k, public_key))
-    return C1, C2
+# def encrypt(curve, G, public_key, message_point, n):
+#     k = random.randint(1, n - 1)
+#     C1 = scalar_mult(k, G)
+#     C2 = point_add(message_point, scalar_mult(k, public_key))
+#     return C1, C2
 
 
 
 
-def encrypt(curve, G, public_key, message_point, k):
-    
+def encrypt(curve, G, public_key, message_point, k): 
     C1 = scalar_mult(k, G)
     C2 = point_add(message_point, scalar_mult(k, public_key))
     return C1, C2
@@ -123,7 +118,8 @@ G = Point(curve,0,376)
 
 Message = Point(curve,562, 201)
 
-PB = Point(curve, 201, 5)
+private = 58 # (private_b * G = Public_b)
+PB = scalar_mult(58,G)
 
 k = 386 
 
@@ -132,7 +128,6 @@ print("Message: ",Message)
 print("Ciphertext =",C1, C2 )
 
 
-private = 58 # (private* G = PB)
 
 plain= decrypt(private, C1, C2)
 
