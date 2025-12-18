@@ -46,28 +46,27 @@ def decrypt_ecies(private_key_hex: str, encrypted_hex: str) -> str:
     try:
         encrypted = bytes.fromhex(encrypted_hex)
 
-        # --- Parse ECIES structure ---
-        # Uncompressed EC point: 65 bytes (0x04 || X || Y)
-        ephemeral_pub_bytes = encrypted[:65]
+        
+        ephemeral_pub_bytes = encrypted[:65] #ephemeral_pub_bytes
         nonce = encrypted[65:77]          # 12 bytes
         ciphertext = encrypted[77:]       # ciphertext + 16-byte GCM tag
 
-        # --- Load recipient private key ---
+        # Private key của người nhận
         private_value = int(private_key_hex, 16)
         recipient_priv = ec.derive_private_key(private_value, CURVE)
 
-        # --- Load ephemeral public key ---
+        # Load ephemeral public key
         ephemeral_pub = ec.EllipticCurvePublicKey.from_encoded_point(
             CURVE, ephemeral_pub_bytes
         )
 
-        # --- ECDH shared secret ---
+        # ECDH để lấy shared secret key bằng public key tạm thời * private key của người nhận
         shared = recipient_priv.exchange(ec.ECDH(), ephemeral_pub)
 
-        # --- KDF (same as encryption) ---
+        
         derived_key = hashlib.sha256(shared).digest()
 
-        # --- AES-256-GCM decryption ---
+        # AES-256
         aesgcm = AESGCM(derived_key)
         plaintext = aesgcm.decrypt(nonce, ciphertext, None)
 
