@@ -339,6 +339,9 @@ ECIES-decrypt(cipherTextPublicKey, encryptedMessage, authTag, recipientPrivateKe
 ```
 Trong thư mục có 1 ví dụ cơ bản về ECIES Ecryption và Decryption sử dụng hệ mật mã bất đối xứng đường cong **SECP256K1** kết hợp với hệ mật đối xứng**AES-GCM** với kết quả như sau:
 
+- Hàm mã hóa sử dụng giao thức mã hóa ECIES và khóa công khai 256 bit ECC. Đầu vào bao gồm khóa công khai ở dạng hex (ở dòng đầu tiên, chưa nén, 128 chữ số hex) + thông điệp văn bản gốc để mã hóa (ở dòng thứ hai). Đầu ra là thông điệp đã được mã hóa ở dạng thập lục phân. Nó chứa khóa công khai của bản mã ECC + bản mã + các tham số của thuật toán khóa đối xứng.
+- Hàm giải mã thông điệp đã mã hóa được tạo ra bởi chương trình ở trên, sử dụng giao thức ECIES và khóa riêng ECC 256 bit. Đầu vào bao gồm khóa riêng dạng hex và thông điệp đã mã hóa (có sẵn ở trên). Ta thu được đầu ra là thông điệp văn bản gốc đã được giải mã. Trong trường hợp có sự cố giải mã, ta báo lỗi.
+
 ```
 Receiver's public key:
 552e2b308514b38e4989d71ed263e0af6376f65ba81a94ebb74f6fadc223ee80aa8fb710cfb445e0871cd1c1a0c1f2adb2b6eedc2a0470b04244548c5be518c8
